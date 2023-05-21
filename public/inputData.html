@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    p {
+      text-align: center;
+    }
+    #product_price {
+      text-align: center;
+      margin: 20px auto;
+    }
+    #product, #year, #month, #ori_price, #aft_price {
+      display: inline;
+      width: 100px;
+    }
+    label, input{
+      padding: 2px;
+    }
+    button:hover {
+      cursor: pointer;
+      background-color: #d7d7d7;
+    }
+    table, th, td{
+      border-collapse: collapse;
+      border: 1px solid black;
+      text-align: center;
+    }
+    th, td {
+      width: 150px;
+    }
+    #app {
+      text-align: center;
+    }
+    #table {
+      display: flex;
+      justify-content: center;
+    }
+    #btn {
+      margin: 20px auto;
+    }
+  </style>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+<p>商品價格漲價輸入表單</p>
+<form id="product_price" action="http://localhost:3000/api" method="post">
+  <label for="product">product</label>
+  <input type="text" id="product" name="product">
+  <label for="year">year </label>
+  <input type="text" id="year" name="year">
+  <label for="month">month</label>
+  <input type="text" id="month" name="month">
+  <label for="ori_price">original price</label>
+  <input type="text" id="ori_price" name="ori_price">
+  <label for="aft_price">after price</label>
+  <input type="text" id="aft_price" name="aft_price">
+  <button type="submit">submit</button>
+</form>
+<div id="app">
+  <button id="btn" v-on:click="handleClick">顯示資料</button>
+  <div id="table">
+    <table>
+      <thead>
+      <tr>
+        <th>product</th>
+        <th>year</th>
+        <th>month</th>
+        <th>ori_price</th>
+        <th>aft_price</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="item in data">
+        <td>{{ item.product }}</td>
+        <td>{{ item.year }}</td>
+        <td>{{ item.month }}</td>
+        <td>{{ item.ori_price }}</td>
+        <td>{{ item.aft_price }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        data: []
+      };
+    },
+    methods: {
+      async handleClick() {
+        console.log("data");
+
+        const url = "http://localhost:3000/api"; // 資料傳送到的 URL
+        try {
+          const response = await fetch(url, {
+            method: 'GET',
+          });
+          const res_data = await response.json();
+          this.data = res_data ;
+          console.log("成功", res_data );
+        } catch (error) {
+          console.log("錯誤", error);
+        }
+      }
+    }
+  });
+
+  app.mount('#app');
+</script>
+</body>
+</html>
